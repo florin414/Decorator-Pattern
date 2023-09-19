@@ -8,6 +8,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddSingleton<IFoodService, RetryPolicySpoonacularFoodService>();
+
 //builder.Services.AddSingleton<SpoonacularFoodService>();
 //builder.Services.AddSingleton<IFoodService>(x =>
 //    new ResilientSpoonacularFoodService(x.GetRequiredService<SpoonacularFoodService>()));
