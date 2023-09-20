@@ -9,7 +9,10 @@ public class ResilientSpoonacularFoodService : IFoodService
         this.foodService = foodService ?? throw new ArgumentNullException(nameof(foodService));
     }
 
-    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(string query, int number)
+    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(
+        string query,
+        int number
+    )
     {
         var retryCount = 0;
         Start:

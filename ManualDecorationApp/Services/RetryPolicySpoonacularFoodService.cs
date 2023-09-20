@@ -23,7 +23,10 @@ public class RetryPolicySpoonacularFoodService : IFoodService
         this.SpoonacularFoodApiSettings = options.Value;
     }
 
-    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(string query, int number)
+    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(
+        string query,
+        int number
+    )
     {
         var client = this.httpClientFactory.CreateClient();
         var apiKey = this.SpoonacularFoodApiSettings.ApiKey;
