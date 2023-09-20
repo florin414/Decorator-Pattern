@@ -1,7 +1,4 @@
-﻿using ManualDecoration.Services;
-using ManualDecorationApp.Models;
-
-namespace ManualDecorationApp.Services;
+﻿namespace ManualDecorationApp.Services;
 
 public class ResilientSpoonacularFoodService : IFoodService
 {
@@ -12,17 +9,17 @@ public class ResilientSpoonacularFoodService : IFoodService
         this.foodService = foodService ?? throw new ArgumentNullException(nameof(foodService));
     }
 
-    public async Task<ProductsResponse?> GetGroceryProductsAsync(string query, int number)
+    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(string query, int number)
     {
         var retryCount = 0;
         Start:
-        try 
+        try
         {
-            return await foodService.GetGroceryProductsAsync(query, number);
+            return await foodService.GetGroceryProductsByQueryAndNumberAsync(query, number);
         }
-        catch(Exception)
+        catch (Exception)
         {
-            if(retryCount <= 4)
+            if (retryCount <= 4)
             {
                 retryCount++;
                 goto Start;

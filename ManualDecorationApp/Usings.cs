@@ -1,0 +1,9 @@
+﻿global using ManualDecoration.Services;
+global using ManualDecorationApp.Extensions;
+global using ManualDecorationApp.Models;
+global using ManualDecorationApp.Services;
+global using Microsoft.Extensions.Options;
+global using System.Net;
+global using Polly;
+global using Polly.Contrib.WaitAndRetry;
+global using Newtonsoft.Json;

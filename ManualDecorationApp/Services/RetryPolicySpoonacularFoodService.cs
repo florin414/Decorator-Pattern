@@ -1,38 +1,37 @@
-﻿using ManualDecoration.Services;
-using ManualDecorationApp.Models;
-using Polly;
-using Polly.Contrib.WaitAndRetry;
-using System.Net;
-
-namespace ManualDecorationApp.Services;
+﻿namespace ManualDecorationApp.Services;
 
 public class RetryPolicySpoonacularFoodService : IFoodService
 {
     private readonly IHttpClientFactory httpClientFactory;
-    private readonly IConfiguration configuration;
-    private readonly IAsyncPolicy<HttpResponseMessage> retryPolicy =
-        Policy<HttpResponseMessage>
+    private SpoonacularFoodApiSettings SpoonacularFoodApiSettings { get; set; }
+    private readonly IAsyncPolicy<HttpResponseMessage> retryPolicy = Policy<HttpResponseMessage>
         .Handle<HttpRequestException>()
-        .OrResult(x => x.StatusCode >= HttpStatusCode.InternalServerError || x.StatusCode == HttpStatusCode.RequestTimeout)
-        .WaitAndRetryAsync(
-            Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)
-         );
+        .OrResult(
+            x =>
+                x.StatusCode >= HttpStatusCode.InternalServerError
+                || x.StatusCode == HttpStatusCode.RequestTimeout
+        )
+        .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5));
 
-    public RetryPolicySpoonacularFoodService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public RetryPolicySpoonacularFoodService(
+        IHttpClientFactory httpClientFactory,
+        IOptions<SpoonacularFoodApiSettings> options
+    )
     {
-        this.httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        this.httpClientFactory =
+            httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        this.SpoonacularFoodApiSettings = options.Value;
     }
 
-    public async Task<ProductsResponse?> GetGroceryProductsAsync(string query, int number)
+    public async Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(string query, int number)
     {
         var client = this.httpClientFactory.CreateClient();
+        var apiKey = this.SpoonacularFoodApiSettings.ApiKey;
+        var apiUrl = this.SpoonacularFoodApiSettings.ApiUrl;
 
-        string apiKey = this.configuration["SpoonacularFoodApiKey"];
+        var apiUrlWithValues = apiUrl.ReplaceApiUrlWithValues(query, number, apiKey);
 
-        var url = $"https://api.spoonacular.com/food/products/search?query={query}&number={number}&apiKey={apiKey}";
-
-        var foodResponse = await retryPolicy.ExecuteAsync(() => client.GetAsync(url));
+        var foodResponse = await retryPolicy.ExecuteAsync(() => client.GetAsync(apiUrlWithValues));
 
         var food = await foodResponse.Content.ReadFromJsonAsync<ProductsResponse?>();
 

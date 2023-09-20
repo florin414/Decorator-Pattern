@@ -1,6 +1,6 @@
-﻿using ManualDecorationApp.Models;
-namespace ManualDecoration.Services;
+﻿namespace ManualDecoration.Services;
+
 public interface IFoodService
 {
-    Task<ProductsResponse?> GetGroceryProductsAsync(string query, int number);
+    Task<ProductsResponse?> GetGroceryProductsByQueryAndNumberAsync(string query, int number);
 }

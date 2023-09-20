@@ -4,20 +4,33 @@ internal static class ResilientServiceExtension
 {
     public static IServiceCollection AddResilient<TConcreteService, TService, TResilientService>(
         this IServiceCollection services
-    ) where TConcreteService : class, TService
-      where TResilientService : class, TService
+    )
+        where TConcreteService : class, TService
+        where TResilientService : class, TService
     {
         Type interfaceType = typeof(TService);
         Type serviceType = typeof(TConcreteService);
 
         if (!interfaceType.IsAssignableFrom(serviceType))
         {
-            throw new ArgumentException($"{serviceType.FullName} must implement {interfaceType.FullName}");
+            throw new ArgumentException(
+                $"{serviceType.FullName} must implement {interfaceType.FullName}"
+            );
         }
 
         services.AddSingleton<TConcreteService>();
 
-        services.AddSingleton(typeof(TService), provider => ActivatorUtilities.CreateInstance<TResilientService>(provider));
+        services.AddSingleton(
+            typeof(TService),
+            provider =>
+            {
+                var concreteService = provider.GetRequiredService<TConcreteService>();
+                return ActivatorUtilities.CreateInstance<TResilientService>(
+                    provider,
+                    concreteService
+                );
+            }
+        );
 
         return services;
     }
