@@ -1,0 +1,12 @@
+﻿@rootUrl = https://localhost:7153
+
+GET {{rootUrl}}/foods?query=pizza&number=5
+
+#
+GET {{rootUrl}}/foods?query=pizza&number=1
+
+#
+GET {{rootUrl}}/foods?query=pizza&number=100
+
+#
+GET {{rootUrl}}/foods?query=burger&number=20
