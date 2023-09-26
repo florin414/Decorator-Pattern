@@ -1,4 +1,6 @@
-﻿@rootUrl = https://localhost:7153
+﻿@hostname=localhost
+@port=7153
+@rootUrl = https://{{hostname}}:{{port}}
 
 GET {{rootUrl}}/foods?query=pizza&number=5
 
