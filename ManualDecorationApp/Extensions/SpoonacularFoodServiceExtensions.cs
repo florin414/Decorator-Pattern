@@ -2,7 +2,7 @@
 
 public static class SpoonacularFoodServiceExtensions
 {
-    public static IServiceCollection AddSpoonacularFoodService(this IServiceCollection services)
+    public static IServiceCollection AddSpoonacularFoodServices(this IServiceCollection services)
     {
         //services.AddSingleton<IFoodService, RetryPolicySpoonacularFoodService>();
 
