@@ -3,12 +3,16 @@
 @rootUrl = https://{{hostname}}:{{port}}
 
 GET {{rootUrl}}/foods?query=pizza&number=5
+Accept: application/json
 
-#
+###
 GET {{rootUrl}}/foods?query=pizza&number=1
+Accept: application/json
 
-#
+###
 GET {{rootUrl}}/foods?query=pizza&number=100
+Accept: application/json
 
-#
+###
 GET {{rootUrl}}/foods?query=burger&number=20
+Accept: application/json
